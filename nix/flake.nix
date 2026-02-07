@@ -1,0 +1,36 @@
+{
+  description = "Sentiment Analysis CLI using transformers.";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/master";
+  };
+
+  outputs =
+    { nixpkgs, ... }:
+    let
+      inherit (nixpkgs) lib;
+      forAllSystems = lib.genAttrs lib.systems.flakeExposed;
+    in
+    {
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            packages = [
+              pkgs.python3
+              pkgs.uv
+            ];
+
+            shellHook = ''
+              unset PYTHONPATH
+              uv sync
+              . .venv/bin/activate
+            '';
+          };
+        }
+      );
+    };
+}
