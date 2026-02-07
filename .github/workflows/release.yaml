@@ -18,14 +18,12 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-    - name: Install uv
-      uses: astral-sh/setup-uv@ed21f2f24f8dd64503750218de024bcf64c7250a
+    - name: Set Up Python
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405
       with:
-        version: "0.9.14"
+        python-version: "3.12.0"
     - name: Install Dependencies
-      run: |
-        uv venv
-        uv pip install -r src/starscream.py
+      run: pip install --requirements-from-script src/starscream.py
     - name: Build with Nuitka
       uses: Nuitka/Nuitka-Action@b24f9b7859f1022afcfad039eb8b8ac3ae299e39
       with:
